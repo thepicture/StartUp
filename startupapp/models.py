@@ -17,7 +17,7 @@ class User:
     last_name = models.CharField(max_length=64)
     type = models.ForeignKey(TypeOfUser, on_delete=models.PROTECT)
     region = models.ForeignKey(Region, on_delete=models.PROTECT)
-    image = models.ImageField()
+    user_image = models.ImageField()
 
 
 class UserEmail:
