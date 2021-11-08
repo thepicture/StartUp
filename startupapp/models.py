@@ -17,6 +17,7 @@ class User:
     last_name = models.CharField(max_length=64)
     type = models.ForeignKey(TypeOfUser, on_delete=models.PROTECT)
     region = models.ForeignKey(Region, on_delete=models.PROTECT)
+    image = models.ImageField()
 
 
 class UserEmail:
@@ -72,7 +73,7 @@ class StartUpImage:
     image_title = models.CharField(max_length=64)
     image_description = models.CharField(2048)
     upload_datetime = models.DateTimeField()
-    image_blob = models.BooleanField()
+    image_blob = models.ImageField()
 
 
 class RoleOfStartUp:
