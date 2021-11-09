@@ -32,7 +32,8 @@ class UserPhoneNumber:
 
 class UserLoginHistory:
     is_success = models.BooleanField()
-    ip_address = models.CharField(max_length=15)
+    ip_address = models.CharField(max_length=39)
+    login_datetime = models.DateTimeField()
     user = models.ForeignKey(User, on_delete=models.PROTECT)
 
 
