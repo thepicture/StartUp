@@ -89,9 +89,4 @@ class StartUpOfUser:
 
 class HashTag:
     text = models.CharField(max_length=32)
-    user = models.ForeignKey(User, on_delete=models.PROTECT)
-
-
-class HashTagOfStartUp:
-    startup = models.ForeignKey(StartUp, on_delete=models.CASCADE)
-    hashtag = models.ForeignKey(HashTag, on_delete=models.CASCADE)
+    startups = models.ManyToManyField(StartUp)
