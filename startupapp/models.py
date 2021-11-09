@@ -1,4 +1,5 @@
 from django.db import models
+from django.contrib.postgres.fields import ArrayField
 
 
 class TypeOfUser:
@@ -18,21 +19,14 @@ class User:
     type = models.ForeignKey(TypeOfUser, on_delete=models.PROTECT)
     region = models.ForeignKey(Region, on_delete=models.PROTECT)
     user_image = models.ImageField()
-
-
-class UserEmail:
-    email_address = models.CharField(max_length=128)
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
-
-
-class UserPhoneNumber:
-    number = models.CharField(max_length=64)
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    register_date = models.DateTimeField()
+    emails = ArrayField(models.CharField(max_length=128))
+    phones = ArrayField(models.CharField(max_length=64))
 
 
 class UserLoginHistory:
     is_success = models.BooleanField()
-    ip_address = models.CharField(max_length=39)
+    ip_address = models.GenericIPAddressField()
     login_datetime = models.DateTimeField()
     user = models.ForeignKey(User, on_delete=models.CASCADE)
 
