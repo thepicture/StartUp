@@ -22,12 +22,12 @@ class User:
 
 class UserEmail:
     email_address = models.CharField(max_length=128)
-    user = models.ForeignKey(User, on_delete=models.PROTECT)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
 
 
 class UserPhoneNumber:
     number = models.CharField(max_length=64)
-    user = models.ForeignKey(User, on_delete=models.PROTECT)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
 
 
 class UserLoginHistory:
