@@ -24,12 +24,23 @@ class User(models.Model):
     Leave it for the scalability in the future.
 
     """
+
+    class TypeOfUser(models.TextChoices):
+        """Defines the types of user
+        with respect to the site.
+
+        """
+        USER = 'US', _('User')
+        MODERATOR = 'MO', _('Moderator')
+        ADMIN = 'AD', _('Admin')
+
     login = models.CharField(max_length=64)
     password = models.CharField(max_length=64)
     first_name = models.CharField(max_length=64)
     middle_name = models.CharField(max_length=64, null=True)
     last_name = models.CharField(max_length=64)
-    type = models.ForeignKey(TypeOfUser, on_delete=models.PROTECT)
+    type = models.CharField(choices=TypeOfUser.choices,
+                            max_length=128)
     region = models.ForeignKey(Region, on_delete=models.PROTECT)
     user_image = models.ImageField(null=True)
     register_date = models.DateTimeField()
