@@ -34,7 +34,7 @@ class UserLoginHistory:
     is_success = models.BooleanField()
     ip_address = models.CharField(max_length=39)
     login_datetime = models.DateTimeField()
-    user = models.ForeignKey(User, on_delete=models.PROTECT)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
 
 
 class TypeOfInvestment:
