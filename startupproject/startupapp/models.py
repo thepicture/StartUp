@@ -3,17 +3,17 @@ from django.contrib.postgres.fields import ArrayField
 from django.utils.translation import gettext_lazy as _
 
 
-class TypeOfUser:
+class TypeOfUser(models.Model):
     """Defines the type of an user."""
     name = models.CharField(max_length=64)
 
 
-class Region:
+class Region(models.Model):
     """Defines the region of the startup or an user."""
     name = models.CharField(max_length=512)
 
 
-class User:
+class User(models.Model):
     """Defines the user.
 
     User's image can be null.
@@ -37,7 +37,7 @@ class User:
     phones = ArrayField(models.CharField(max_length=64))
 
 
-class UserLoginHistory:
+class UserLoginHistory(models.Model):
     """Defines the user login history.
 
     Must have IPv4 or IPv6 ip address,
@@ -51,12 +51,12 @@ class UserLoginHistory:
     user = models.ForeignKey(User, on_delete=models.CASCADE)
 
 
-class Category:
+class Category(models.Model):
     """Defines the category of a startup."""
     name = models.CharField(max_length=128)
 
 
-class StartUp:
+class StartUp(models.Model):
     """Defines the startup.
 
     StartUp must have at least one creator.
@@ -82,8 +82,9 @@ class StartUp:
     max_members_count = models.SmallIntegerField()
 
 
-class UserStartupInvestHistory:
+class UserStartupInvestHistory(models.Model):
     """Defines the startups investment history of the user."""
+
     class TypeOfInvestment(models.TextChoices):
         """Defines the type of investment."""
         WITHDRAW = 'WI', _('Withdraw')
@@ -92,13 +93,14 @@ class UserStartupInvestHistory:
     user = models.ForeignKey(User, on_delete=models.PROTECT)
     startup = models.ForeignKey(StartUp, on_delete=models.PROTECT)
     invest_type = models.CharField(TypeOfInvestment,
-                                   on_delete=models.PROTECT,
-                                   choices=TypeOfInvestment.choices)
+                                   choices=TypeOfInvestment.choices,
+                                   max_length=128)
     invest_datetime = models.DateTimeField()
-    invested_money = models.DecimalField()
+    invested_money = models.DecimalField(max_digits=9,
+                                         decimal_places=2)
 
 
-class StartUpComment:
+class StartUpComment(models.Model):
     """Defines the comment of the startup."""
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     text = models.CharField(max_length=2048)
@@ -106,17 +108,18 @@ class StartUpComment:
     startup = models.ForeignKey(StartUp, on_delete=models.CASCADE)
 
 
-class StartUpImage:
+class StartUpImage(models.Model):
     """Defines the image set of the startup."""
     startup = models.ForeignKey(StartUp, on_delete=models.CASCADE)
     image_title = models.CharField(max_length=64)
-    image_description = models.CharField(2048)
+    image_description = models.CharField(max_length=2048)
     upload_datetime = models.DateTimeField()
     image_blob = models.ImageField()
 
 
-class StartUpOfUser:
+class StartUpOfUser(models.Model):
     """Defines the user's role in the startup."""
+
     class RoleOfStartUp(models.TextChoices):
         """Defines an user's role in the startup."""
         MEMBER = 'ME', _('Withdraw')
@@ -129,7 +132,7 @@ class StartUpOfUser:
                             choices=RoleOfStartUp.choices)
 
 
-class HashTag:
+class HashTag(models.Model):
     """Defines the set of hashtags for startups."""
     text = models.CharField(max_length=32)
     startups = models.ManyToManyField(StartUp)
