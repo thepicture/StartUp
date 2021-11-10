@@ -4,6 +4,7 @@ from django.db import migrations, models
 
 
 def insert_user_types(apps, schema_editor):
+    """Inserts predefined user types into the database."""
     for user_type_name in ('Пользователь',
                            'Администратор',
                            'Модератор'):
@@ -14,6 +15,7 @@ def insert_user_types(apps, schema_editor):
 
 
 def insert_role_types(apps, schema_editor):
+    """Inserts predefined startup role types into the database."""
     for role_type_name in ('Участник',
                            'Волонтёр',
                            'Организатор'):
@@ -24,6 +26,7 @@ def insert_role_types(apps, schema_editor):
 
 
 def insert_transaction_types(apps, schema_editor):
+    """Inserts predefined transcation types into the database."""
     for transaction_type_name in ('Пользователь',
                                   'Модератор',
                                   'Администратор'):
@@ -41,5 +44,5 @@ class Migration(migrations.Migration):
     operations = [
         migrations.RunPython(insert_user_types),
         migrations.RunPython(insert_role_types),
-        migrations.RunPython(insert_transaction_types)
+        migrations.RunPython(insert_transaction_types),
     ]
