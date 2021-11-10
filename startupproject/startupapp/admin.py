@@ -1,3 +1,6 @@
 from django.contrib import admin
 
-# Register your models here.
+from .models import StartUp, Category
+
+admin.site.register(StartUp)
+admin.site.register(Category)

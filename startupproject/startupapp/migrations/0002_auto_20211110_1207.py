@@ -27,9 +27,8 @@ def insert_role_types(apps, schema_editor):
 
 def insert_transaction_types(apps, schema_editor):
     """Inserts predefined transcation types into the database."""
-    for transaction_type_name in ('Пользователь',
-                                  'Модератор',
-                                  'Администратор'):
+    for transaction_type_name in ('Покупка',
+                                  'Продажа'):
         TypeOfTransaction = apps.get_model('startupapp', 'TypeOfTransaction')
         current_type = TypeOfTransaction()
         current_type.name = transaction_type_name
