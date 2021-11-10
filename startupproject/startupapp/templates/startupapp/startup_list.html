@@ -1,0 +1,9 @@
+{% extends "base.html" %}
+{% block content %}
+    <h2>Startups</h2>
+    <ul>
+        {% for startup in startup_list %}
+        <li>{{ startup.name }}</li>
+        {% endfor %}
+    </ul>
+{% endblock %}

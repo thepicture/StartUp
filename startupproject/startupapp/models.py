@@ -1,3 +1,4 @@
+import django.contrib.auth.models
 from django.db import models
 from django.contrib.postgres.fields import ArrayField
 
@@ -6,10 +7,16 @@ class TypeOfUser(models.Model):
     """Defines the type of an user."""
     name = models.CharField(max_length=64)
 
+    def __str__(self):
+        return self.name
+
 
 class Region(models.Model):
     """Defines the region of the startup or an user."""
     name = models.CharField(max_length=512)
+
+    def __str__(self):
+        return self.name
 
 
 class User(models.Model):
@@ -35,6 +42,12 @@ class User(models.Model):
     register_date = models.DateTimeField()
     emails = ArrayField(models.CharField(max_length=128))
     phones = ArrayField(models.CharField(max_length=64))
+    money_in_rubles = models.DecimalField(decimal_places=2,
+                                          default=0,
+                                          max_digits=9)
+
+    def __str__(self):
+        return self.login
 
 
 class UserLoginHistory(models.Model):
@@ -50,10 +63,16 @@ class UserLoginHistory(models.Model):
     login_datetime = models.DateTimeField()
     user = models.ForeignKey(User, on_delete=models.CASCADE)
 
+    def __str__(self):
+        return self.login_datetime
+
 
 class Category(models.Model):
     """Defines the category of a startup."""
     name = models.CharField(max_length=128)
+
+    def __str__(self):
+        return self.name
 
 
 class StartUp(models.Model):
@@ -81,9 +100,15 @@ class StartUp(models.Model):
     description = models.CharField(max_length=2048)
     max_members_count = models.SmallIntegerField()
 
+    def __str__(self):
+        return f'{self.name}.{self.creation_datetime}'
+
 
 class TypeOfTransaction(models.Model):
     name = models.CharField(max_length=128)
+
+    def __str__(self):
+        return self.name
 
 
 class UserStartupInvestHistory(models.Model):
@@ -97,6 +122,11 @@ class UserStartupInvestHistory(models.Model):
     invested_money = models.DecimalField(max_digits=9,
                                          decimal_places=2)
 
+    def __str__(self):
+        return f'{self.user.login}.' \
+               f'{self.invest_type.name}.' \
+               f'{self.invest_datetime}'
+
 
 class StartUpComment(models.Model):
     """Defines the comment of the startup."""
@@ -104,6 +134,9 @@ class StartUpComment(models.Model):
     text = models.CharField(max_length=2048)
     post_datetime = models.DateTimeField()
     startup = models.ForeignKey(StartUp, on_delete=models.CASCADE)
+
+    def __str__(self):
+        return f'{self.user.login} ({self.post_datetime}):{self.text}'
 
 
 class StartUpImage(models.Model):
@@ -113,10 +146,19 @@ class StartUpImage(models.Model):
     image_description = models.CharField(max_length=2048)
     upload_datetime = models.DateTimeField()
     image_blob = models.ImageField()
+    user = models.ForeignKey(User,
+                             on_delete=models.SET_NULL,
+                             null=True)
+
+    def __str__(self):
+        return f'{self.user}:{self.image_title}'
 
 
 class RoleOfStartUp(models.Model):
     name = models.CharField(max_length=128)
+
+    def __str__(self):
+        return self.name
 
 
 class StartUpOfUser(models.Model):
@@ -126,8 +168,14 @@ class StartUpOfUser(models.Model):
     startup = models.ForeignKey(StartUp, on_delete=models.CASCADE)
     role = models.ForeignKey(RoleOfStartUp, on_delete=models.CASCADE)
 
+    def __str__(self):
+        return f'{self.user.login}, {self.startup.name}, {self.role.name}'
+
 
 class HashTag(models.Model):
     """Defines the set of hashtags for startups."""
     text = models.CharField(max_length=32)
     startups = models.ManyToManyField(StartUp)
+
+    def __str__(self):
+        return self.text
