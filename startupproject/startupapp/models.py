@@ -1,6 +1,5 @@
 from django.db import models
 from django.contrib.postgres.fields import ArrayField
-from django.utils.translation import gettext_lazy as _
 
 
 class TypeOfUser(models.Model):
@@ -25,22 +24,12 @@ class User(models.Model):
 
     """
 
-    class TypeOfUser(models.TextChoices):
-        """Defines the types of user
-        with respect to the site.
-
-        """
-        USER = 'US', _('User')
-        MODERATOR = 'MO', _('Moderator')
-        ADMIN = 'AD', _('Admin')
-
     login = models.CharField(max_length=64)
     password = models.CharField(max_length=64)
     first_name = models.CharField(max_length=64)
     middle_name = models.CharField(max_length=64, null=True)
     last_name = models.CharField(max_length=64)
-    type = models.CharField(choices=TypeOfUser.choices,
-                            max_length=128)
+    type = models.ForeignKey(TypeOfUser, on_delete=models.PROTECT)
     region = models.ForeignKey(Region, on_delete=models.PROTECT)
     user_image = models.ImageField(null=True)
     register_date = models.DateTimeField()
@@ -93,19 +82,17 @@ class StartUp(models.Model):
     max_members_count = models.SmallIntegerField()
 
 
+class TypeOfTransaction(models.Model):
+    name = models.CharField(max_length=128)
+
+
 class UserStartupInvestHistory(models.Model):
     """Defines the startups investment history of the user."""
 
-    class TypeOfInvestment(models.TextChoices):
-        """Defines the type of investment."""
-        WITHDRAW = 'WI', _('Withdraw')
-        INVEST = 'IN', _('Invest')
-
     user = models.ForeignKey(User, on_delete=models.PROTECT)
     startup = models.ForeignKey(StartUp, on_delete=models.PROTECT)
-    invest_type = models.CharField(TypeOfInvestment,
-                                   choices=TypeOfInvestment.choices,
-                                   max_length=128)
+    invest_type = models.ForeignKey(TypeOfTransaction,
+                                    on_delete=models.PROTECT)
     invest_datetime = models.DateTimeField()
     invested_money = models.DecimalField(max_digits=9,
                                          decimal_places=2)
@@ -128,19 +115,16 @@ class StartUpImage(models.Model):
     image_blob = models.ImageField()
 
 
+class RoleOfStartUp(models.Model):
+    name = models.CharField(max_length=128)
+
+
 class StartUpOfUser(models.Model):
     """Defines the user's role in the startup."""
 
-    class RoleOfStartUp(models.TextChoices):
-        """Defines an user's role in the startup."""
-        MEMBER = 'ME', _('Withdraw')
-        MODERATOR = 'MO', _('Moderator')
-        CREATOR = 'CR', _('Creator')
-
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     startup = models.ForeignKey(StartUp, on_delete=models.CASCADE)
-    role = models.CharField(max_length=128,
-                            choices=RoleOfStartUp.choices)
+    role = models.ForeignKey(RoleOfStartUp, on_delete=models.CASCADE)
 
 
 class HashTag(models.Model):
