@@ -145,7 +145,7 @@ class StartUpImage(models.Model):
     image_title = models.CharField(max_length=64)
     image_description = models.CharField(max_length=2048)
     upload_datetime = models.DateTimeField()
-    image_blob = models.ImageField()
+    image_blob = models.ImageField(upload_to='images/')
     user = models.ForeignKey(User,
                              on_delete=models.SET_NULL,
                              null=True)
